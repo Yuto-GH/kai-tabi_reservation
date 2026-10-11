@@ -84,32 +84,34 @@ def load_urls():
 
     return out
 
+
 def classify(text: str):
     normalized = re.sub(r"\s+", " ", text)
 
-    # 選択した客室の検索結果が満室の場合
+    # 検索結果が0件で、客室が満室と表示されている
     if (
-        "検索結果0/1件" in normalized
-        and re.search(r"検索結果0/1件.{0,300}満室", normalized)
+        re.search(r"検索結果\s*0/1件", normalized)
+        and re.search(r"検索結果\s*0/1件.{0,300}満室", normalized)
     ):
         return "UNAVAILABLE", "selected room result indicates sold out"
 
     if any(s in normalized for s in SOLD_OUT):
         return "UNAVAILABLE", "official sold-out wording detected"
 
-    has_plan = any(term in normalized for term in PLAN_TERMS)
-    hits = [s for s in AVAILABLE if s in normalized]
-
-    if has_plan and hits:
+    # 検索結果に客室があり、残室数が明示されている
+    if re.search(
+        r"検索結果\s*1/1件.{0,250}残り\s*\d+\s*室",
+        normalized,
+    ):
         return (
             "POSSIBLE_AVAILABLE",
-            "plan wording and generic availability/action wording detected: "
-            + ", ".join(hits),
+            "room search result explicitly shows remaining rooms",
         )
 
+    # カレンダーの凡例や一般的な予約ボタンだけでは空室と判定しない
     return (
         "UNKNOWN",
-        "no validated availability signal; page may have changed or require interaction",
+        "no confirmed room-level availability signal",
     )
 
 def send_email(subject, body):
