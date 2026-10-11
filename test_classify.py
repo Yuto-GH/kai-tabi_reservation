@@ -4,14 +4,16 @@ from monitor import classify
 
 
 class TestAvailabilityClassification(unittest.TestCase):
-
+    
     def test_possible_available(self):
-        # 空室があり、予約ボタンが表示されている想定
         text = """
-        界タビ20s
         検索結果1/1件
-        空室あり
-        このプランを予約
+        洋室（3名定員）
+        残り2室
+        1〜3名
+        43㎡
+        トリプル
+        1泊1室合計 38,300 円
         """
         status, reason = classify(text)
         self.assertEqual(status, "POSSIBLE_AVAILABLE")
