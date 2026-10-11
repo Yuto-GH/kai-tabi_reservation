@@ -73,7 +73,17 @@ def main():
                 response = page.goto(target["url"], wait_until="domcontentloaded", timeout=45000)
                 page.wait_for_timeout(2500)  # modest wait for client-side text; do not hammer the site
                 text = page.locator("body").inner_text(timeout=15000)
-                status, reason = classify(text)
+                # 読み取り結果の調査用ログ
+　　　　　　　　　　　print(f"[DEBUG] Facility: {target['name']}")
+　　　　　　　　　　　print(f"[DEBUG] Page title: {page.title()}")
+　　　　　　　　　　　print(f"[DEBUG] Page URL: {page.url}")
+　　　　　　　　　　　print(f"[DEBUG] Text length: {len(text)}")
+　　　　　　　　　　　print(f"[DEBUG] Target date: {DATE}")
+　　　　　　　　　　　
+　　　　　　　　　　　status, reason = classify(text)
+　　　　　　　　　　　print(f"[DEBUG] Classification: {status}")
+　　　　　　　　　　　print(f"[DEBUG] Reason: {reason}")
+
                 # Keep evidence short for diagnostics; no personal/customer data is saved.
                 new["results"][target["name"]] = {"status": status, "reason": reason, "url": target["url"], "http_status": response.status if response else None}
                 if status == "POSSIBLE_AVAILABLE": found.append((target["name"], target["url"], reason))
