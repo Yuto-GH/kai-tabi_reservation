@@ -1,5 +1,5 @@
 {
-  "checked_at": "2026-10-11T11:16:45.009312+00:00",
+  "checked_at": "2026-10-11T11:46:53.394782+00:00",
   "start_date": "2026-11-09",
   "end_date": "2026-11-12",
   "results": {
@@ -73,30 +73,6 @@
       "status": "UNAVAILABLE",
       "reason": "selected room result indicates sold out",
       "url": "https://hoshinoresorts.com/JA/hotels/0000000135/plans/0000000030?checkIn=2026%2F11%2F12&stay=1&a=2&b=0&c=0&d=0",
-      "http_status": 200
-    },
-    "界 雲仙（11/9宿泊）": {
-      "status": "UNAVAILABLE",
-      "reason": "selected room result indicates sold out",
-      "url": "https://hoshinoresorts.com/JA/hotels/0000000131/plans/0000000083?checkIn=2026%2F11%2F09&stay=1&a=2&b=0&c=0&d=0",
-      "http_status": 200
-    },
-    "界 雲仙（11/10宿泊）": {
-      "status": "UNAVAILABLE",
-      "reason": "selected room result indicates sold out",
-      "url": "https://hoshinoresorts.com/JA/hotels/0000000131/plans/0000000083?checkIn=2026%2F11%2F10&stay=1&a=2&b=0&c=0&d=0",
-      "http_status": 200
-    },
-    "界 雲仙（11/11宿泊）": {
-      "status": "POSSIBLE_AVAILABLE",
-      "reason": "room search result explicitly shows remaining rooms",
-      "url": "https://hoshinoresorts.com/JA/hotels/0000000131/plans/0000000083?checkIn=2026%2F11%2F11&stay=1&a=2&b=0&c=0&d=0",
-      "http_status": 200
-    },
-    "界 雲仙（11/12宿泊）": {
-      "status": "UNAVAILABLE",
-      "reason": "selected room result indicates sold out",
-      "url": "https://hoshinoresorts.com/JA/hotels/0000000131/plans/0000000083?checkIn=2026%2F11%2F12&stay=1&a=2&b=0&c=0&d=0",
       "http_status": 200
     }
   }
