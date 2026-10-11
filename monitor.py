@@ -168,17 +168,29 @@ def main():
                     timeout=45000,
                 )
 
-                page.wait_for_timeout(2500)
+                # JavaScriptによる描画を少し待つ
+                page.wait_for_timeout(5000)
+
+                # ページの取得状況を診断
+                print("[DEBUG] Facility:", target["name"])
+                print("[DEBUG] Requested URL:", target["url"])
+                print("[DEBUG] Final URL:", page.url)
+                print("[DEBUG] HTTP status:",
+                      response.status if response else None)
+                print("[DEBUG] Content-Type:",
+                      response.headers.get("content-type")
+                      if response else None)
+                print("[DEBUG] Page title:", repr(page.title()))
+
+                html = page.content()
+                print("[DEBUG] HTML length:", len(html))
+                print("[DEBUG] HTML preview:", repr(html[:1000]))
 
                 text = page.locator("body").inner_text(timeout=15000)
-
-                # Debug logs
-                print("[DEBUG] Facility:", target["name"])
-                print("[DEBUG] Page title:", page.title())
-                print("[DEBUG] Page URL:", page.url)
                 print("[DEBUG] Text length:", len(text))
+                print("[DEBUG] Page text:", repr(text[:1000]))
                 print("[DEBUG] Target date:", DATE)
-                
+
                 if not text.strip():
                     raise RuntimeError(
                         "Page body is empty; availability cannot be checked"
