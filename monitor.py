@@ -205,7 +205,8 @@ def main():
 
     new = {
         "checked_at": datetime.now(timezone.utc).isoformat(),
-        "stay_date": DATE,
+        "start_date": os.getenv("START_DATE", "2026-11-09"),
+        "end_date": os.getenv("END_DATE", "2026-11-12"),
         "results": {},
     }
 
@@ -248,7 +249,7 @@ def main():
                 text = page.locator("body").inner_text(timeout=15000)
                 print("[DEBUG] Text length:", len(text))
                 print("[DEBUG] Page text:", repr(text[:1000]))
-                print("[DEBUG] Target date:", DATE)
+                print("[DEBUG] Target date:", target["date"])
 
                 if not text.strip():
                     raise RuntimeError(
@@ -304,13 +305,19 @@ def main():
         x for x in found
         if prior.get(x[0], {}).get("status") != "POSSIBLE_AVAILABLE"
     ]
-
+    
     if newly_available:
+        start_date = os.getenv("START_DATE", "2026-11-09")
+        end_date = os.getenv("END_DATE", "2026-11-12")
+
         lines = [
-            f"界タビ20'sで空室の可能性を検知しました（宿泊日: {DATE}）",
+            "界タビ20'sで空室の可能性を検知しました。",
+            f"監視対象期間: {start_date} ～ {end_date}",
             "",
-            "※自動検知は未検証のため、必ず予約画面で確認してください。",
+            "以下の施設・宿泊日に空室の可能性があります。",
+            "※必ず予約画面で空室状況とプランを確認してください。",
         ]
+
 
         for name, url, reason in newly_available:
             lines += [
@@ -318,7 +325,7 @@ def main():
             ]
 
         send_email(
-            f"【界タビ20's】空室の可能性：{DATE}",
+            "【界タビ20's】空室の可能性を検知しました",
             "\n".join(lines),
         )
 
