@@ -11,10 +11,10 @@ import os
 import re
 import smtplib
 import sys
-from datetime import datetime, timezone
+from datetime import date, datetime, timedelta, timezone
 from email.message import EmailMessage
 from pathlib import Path
-from urllib.parse import urlparse
+from urllib.parse import parse_qs, urlencode, urlparse, urlunparse
 
 from playwright.sync_api import sync_playwright, TimeoutError as PlaywrightTimeoutError
 
@@ -44,46 +44,107 @@ PLAN_TERMS = ["界タビ20s", "界タビ20’s", "界タビ20's"]
 
 
 def load_urls():
-    raw = os.getenv("BOOKING_URLS_JSON", "[]")
+    raw = os.getenv("BOOKING_URLS_JSON")
 
-    try:
-        urls = json.loads(raw)
-    except json.JSONDecodeError as e:
-        raise SystemExit(
-            f"BOOKING_URLS_JSON must be a JSON array of direct booking-result URLs: {e}"
+    if not raw:
+        raise RuntimeError(
+            "BOOKING_URLS_JSON secret is not set"
         )
 
-    if not isinstance(urls, list) or not urls:
-        raise SystemExit(
-            "BOOKING_URLS_JSON is empty. Add direct official booking-result URLs "
-            "for eligible Kanto/Chubu properties after manually setting the stay date and plan."
+    facilities = json.loads(raw)
+
+    if not isinstance(facilities, list) or not facilities:
+        raise RuntimeError(
+            "BOOKING_URLS_JSON must be a non-empty JSON list"
         )
 
-    out = []
+    # 監視するチェックイン日（両端を含む）
+    start_date = date.fromisoformat(
+        os.getenv("START_DATE", "2026-11-09")
+    )
+    end_date = date.fromisoformat(
+        os.getenv("END_DATE", "2026-11-12")
+    )
 
-    for item in urls:
-        if not isinstance(item, dict) or not item.get("name") or not item.get("url"):
-            raise SystemExit(
-                "Each BOOKING_URLS_JSON item must have name and url keys"
+    if end_date < start_date:
+        raise RuntimeError(
+            "END_DATE must be on or after START_DATE"
+        )
+
+    dates = []
+    current = start_date
+
+    while current <= end_date:
+        dates.append(current)
+        current += timedelta(days=1)
+
+    targets = []
+
+    for facility in facilities:
+        name = facility.get("name")
+        url = facility.get("url")
+
+        if not name or not url:
+            raise RuntimeError(
+                "Each facility must have name and url"
             )
 
-        u = urlparse(item["url"])
+        parsed = urlparse(url)
 
-        if u.scheme != "https" or not (
-            u.hostname == "hoshinoresorts.com"
-            or (
-                u.hostname is not None
-                and u.hostname.endswith(".hoshinoresorts.com")
+        if (
+            parsed.scheme != "https"
+            or not parsed.hostname
+            or not (
+                parsed.hostname == "hoshinoresorts.com"
+                or parsed.hostname.endswith(
+                    ".hoshinoresorts.com"
+                )
             )
         ):
-            raise SystemExit(
-                f"Only HTTPS hoshinoresorts.com URLs accepted: {item.get('url')}"
+            raise RuntimeError(
+                f"Invalid Hoshino Resorts URL: {url}"
             )
 
-        out.append({"name": item["name"], "url": item["url"]})
+        query = parse_qs(
+            parsed.query,
+            keep_blank_values=True,
+        )
 
-    return out
+        if "checkIn" not in query:
+            raise RuntimeError(
+                f"URL has no checkIn parameter: {url}"
+            )
 
+        # 各施設のURLを日付ごとに展開
+        for stay_date in dates:
+            query_for_date = dict(query)
+            query_for_date["checkIn"] = [
+                stay_date.strftime("%Y/%m/%d")
+            ]
+
+            new_query = urlencode(
+                query_for_date,
+                doseq=True,
+            )
+
+            target_url = urlunparse(
+                parsed._replace(query=new_query)
+            )
+
+            targets.append({
+                "name": (
+                    f"{name}（{stay_date.month}/"
+                    f"{stay_date.day}宿泊）"
+                ),
+                "url": target_url,
+                "date": stay_date.isoformat(),
+            })
+
+    print(f"Facilities: {len(facilities)}")
+    print(f"Dates: {start_date} to {end_date}")
+    print(f"Total monitoring targets: {len(targets)}")
+
+    return targets
 
 def classify(text: str):
     normalized = re.sub(r"\s+", " ", text)
