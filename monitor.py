@@ -84,12 +84,10 @@ def load_urls():
 
     return out
 
-
-
 def classify(text: str):
     normalized = re.sub(r"\s+", " ", text)
 
-    # Explicit sold-out message shown in the selected room results.
+    # 選択した客室の検索結果が満室の場合
     if (
         "検索結果0/1件" in normalized
         and re.search(r"検索結果0/1件.{0,300}満室", normalized)
@@ -113,8 +111,6 @@ def classify(text: str):
         "UNKNOWN",
         "no validated availability signal; page may have changed or require interaction",
     )
-
-
 
 def send_email(subject, body):
     host = os.environ["SMTP_HOST"]
@@ -197,8 +193,19 @@ def main():
                     )
 
                 status, reason = classify(text)
+                
+                normalized = re.sub(r"\s+", " ", text)
+
                 print("[DEBUG] Classification:", status)
                 print("[DEBUG] Reason:", reason)
+
+                for keyword in ["検索結果0/1件", "満室", "空室あり", "残りわずか"]:
+                    pos = normalized.find(keyword)
+                    if pos >= 0:
+                        print(
+                            f"[DEBUG] Context for {keyword}:",
+                            normalized[max(0, pos - 150):pos + 250]
+                        )
                 
                 # Keep evidence short for diagnostics; no personal/customer data is saved.
                 new["results"][target["name"]] = {
