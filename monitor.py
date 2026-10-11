@@ -164,6 +164,7 @@ def main():
                 text = page.locator("body").inner_text(timeout=15000)
 
                 # Debug logs
+                print("[DEBUG] Page text:\n", text[:3000])
                 print("[DEBUG] Facility:", target["name"])
                 print("[DEBUG] Page title:", page.title())
                 print("[DEBUG] Page URL:", page.url)
