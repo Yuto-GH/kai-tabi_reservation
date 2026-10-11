@@ -60,10 +60,10 @@ def load_urls():
 
     # 監視するチェックイン日（両端を含む）
     start_date = date.fromisoformat(
-        os.getenv("START_DATE", "2026-11-09")
+        os.getenv("START_DATE", "2026-11-01")
     )
     end_date = date.fromisoformat(
-        os.getenv("END_DATE", "2026-11-12")
+        os.getenv("END_DATE", "2026-11-30")
     )
 
     if end_date < start_date:
@@ -205,8 +205,8 @@ def main():
 
     new = {
         "checked_at": datetime.now(timezone.utc).isoformat(),
-        "start_date": os.getenv("START_DATE", "2026-11-09"),
-        "end_date": os.getenv("END_DATE", "2026-11-12"),
+        "start_date": os.getenv("START_DATE", "2026-11-01"),
+        "end_date": os.getenv("END_DATE", "2026-11-30"),
         "results": {},
     }
 
@@ -307,8 +307,8 @@ def main():
     ]
     
     if newly_available:
-        start_date = os.getenv("START_DATE", "2026-11-09")
-        end_date = os.getenv("END_DATE", "2026-11-12")
+        start_date = os.getenv("START_DATE", "2026-11-01")
+        end_date = os.getenv("END_DATE", "2026-11-30")
 
         lines = [
             "界タビ20'sで空室の可能性を検知しました。",
