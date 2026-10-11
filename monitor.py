@@ -173,18 +173,21 @@ def main():
                 text = page.locator("body").inner_text(timeout=15000)
 
                 # Debug logs
-                print("[DEBUG] Page text:\n", text[:3000])
                 print("[DEBUG] Facility:", target["name"])
                 print("[DEBUG] Page title:", page.title())
                 print("[DEBUG] Page URL:", page.url)
                 print("[DEBUG] Text length:", len(text))
                 print("[DEBUG] Target date:", DATE)
+                
+                if not text.strip():
+                    raise RuntimeError(
+                        "Page body is empty; availability cannot be checked"
+                    )
 
                 status, reason = classify(text)
-
                 print("[DEBUG] Classification:", status)
                 print("[DEBUG] Reason:", reason)
-
+                
                 # Keep evidence short for diagnostics; no personal/customer data is saved.
                 new["results"][target["name"]] = {
                     "status": status,
