@@ -85,8 +85,16 @@ def load_urls():
     return out
 
 
+
 def classify(text: str):
     normalized = re.sub(r"\s+", " ", text)
+
+    # Explicit sold-out message shown in the selected room results.
+    if (
+        "検索結果0/1件" in normalized
+        and re.search(r"検索結果0/1件.{0,300}満室", normalized)
+    ):
+        return "UNAVAILABLE", "selected room result indicates sold out"
 
     if any(s in normalized for s in SOLD_OUT):
         return "UNAVAILABLE", "official sold-out wording detected"
@@ -105,6 +113,7 @@ def classify(text: str):
         "UNKNOWN",
         "no validated availability signal; page may have changed or require interaction",
     )
+
 
 
 def send_email(subject, body):
