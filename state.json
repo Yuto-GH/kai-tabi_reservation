@@ -1,5 +1,5 @@
 {
-  "checked_at": "2026-10-13T01:00:00.116265+00:00",
+  "checked_at": "2026-10-13T01:22:02.386038+00:00",
   "start_date": "2026-11-01",
   "end_date": "2026-11-30",
   "results": {
@@ -106,9 +106,10 @@
       "http_status": 200
     },
     "界 仙石原（11/18宿泊）": {
-      "status": "ERROR",
-      "reason": "Page.goto: Timeout 45000ms exceeded.\nCall log:\n  - navigating to \"https://hoshinoresorts.com/JA/hotels/0000000124/plans/0000000116?checkIn=2026%2F11%2F18&stay=1&a=2&b=0&c=0&d=0\", waiting until \"domcontentloaded\"\n",
-      "url": "https://hoshinoresorts.com/JA/hotels/0000000124/plans/0000000116?checkIn=2026%2F11%2F18&stay=1&a=2&b=0&c=0&d=0"
+      "status": "UNAVAILABLE",
+      "reason": "selected room result indicates sold out",
+      "url": "https://hoshinoresorts.com/JA/hotels/0000000124/plans/0000000116?checkIn=2026%2F11%2F18&stay=1&a=2&b=0&c=0&d=0",
+      "http_status": 200
     },
     "界 仙石原（11/19宿泊）": {
       "status": "UNAVAILABLE",
