@@ -1,5 +1,5 @@
 {
-  "checked_at": "2026-10-13T04:21:51.503909+00:00",
+  "checked_at": "2026-10-13T04:53:36.431515+00:00",
   "start_date": "2026-11-01",
   "end_date": "2026-11-30",
   "results": {
@@ -508,8 +508,8 @@
       "http_status": 200
     },
     "界 草津（11/25宿泊）": {
-      "status": "POSSIBLE_AVAILABLE",
-      "reason": "room search result explicitly shows remaining rooms",
+      "status": "UNAVAILABLE",
+      "reason": "selected room result indicates sold out",
       "url": "https://hoshinoresorts.com/JA/hotels/0000000135/plans/0000000030?checkIn=2026%2F11%2F25&stay=1&a=2&b=0&c=0&d=0",
       "http_status": 200
     },
