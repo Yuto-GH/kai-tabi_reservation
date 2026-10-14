@@ -1,5 +1,5 @@
 {
-  "checked_at": "2026-10-14T12:02:22.735822+00:00",
+  "checked_at": "2026-10-14T12:37:32.542194+00:00",
   "start_date": "2026-11-01",
   "end_date": "2026-11-30",
   "results": {
@@ -280,10 +280,9 @@
       "http_status": 200
     },
     "界 箱根（11/17宿泊）": {
-      "status": "UNKNOWN",
-      "reason": "no confirmed room-level availability signal",
-      "url": "https://hoshinoresorts.com/JA/hotels/0000000117/plans/0000000338?checkIn=2026%2F11%2F17&stay=1&a=2&b=0&c=0&d=0",
-      "http_status": 200
+      "status": "ERROR",
+      "reason": "Page.goto: Timeout 45000ms exceeded.\nCall log:\n  - navigating to \"https://hoshinoresorts.com/JA/hotels/0000000117/plans/0000000338?checkIn=2026%2F11%2F17&stay=1&a=2&b=0&c=0&d=0\", waiting until \"domcontentloaded\"\n",
+      "url": "https://hoshinoresorts.com/JA/hotels/0000000117/plans/0000000338?checkIn=2026%2F11%2F17&stay=1&a=2&b=0&c=0&d=0"
     },
     "界 箱根（11/18宿泊）": {
       "status": "UNKNOWN",
