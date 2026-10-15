@@ -11,15 +11,14 @@ import os
 import re
 import smtplib
 import sys
-from datetime import date, datetime, timedelta, timezone
+from datetime import date, timedelta
 from email.message import EmailMessage
 from pathlib import Path
 from urllib.parse import parse_qs, urlencode, urlparse, urlunparse
 
 from playwright.sync_api import sync_playwright, TimeoutError as PlaywrightTimeoutError
 
-DATE = os.getenv("STAY_DATE", "2026-11-10")
-RECIPIENT = os.getenv("NOTIFY_TO", "newyork.yuto.19980403@gmail.com")
+RECIPIENT = os.getenv("NOTIFY_TO", "")
 STATE_FILE = Path("state.json")
 CAMPAIGN = "https://hoshinoresorts.com/jp/sp/kaitabi20s/"
 
@@ -69,6 +68,12 @@ def load_urls():
     if end_date < start_date:
         raise RuntimeError(
             "END_DATE must be on or after START_DATE"
+        )
+
+    # This monitor is intentionally scoped to November 2026.
+    if start_date < date(2026, 11, 1) or end_date > date(2026, 11, 30):
+        raise RuntimeError(
+            "START_DATE and END_DATE must both be within November 2026"
         )
 
     dates = []
@@ -204,7 +209,6 @@ def main():
     )
 
     new = {
-        "checked_at": datetime.now(timezone.utc).isoformat(),
         "start_date": os.getenv("START_DATE", "2026-11-01"),
         "end_date": os.getenv("END_DATE", "2026-11-30"),
         "results": {},
@@ -215,10 +219,21 @@ def main():
 
     with sync_playwright() as p:
         browser = p.chromium.launch()
-        page = browser.new_page(
+        context = browser.new_context(
             locale="ja-JP",
             timezone_id="Asia/Tokyo",
         )
+        page = context.new_page()
+
+        # Images, fonts and media do not contribute to the text-based detector.
+        # Keep scripts and stylesheets enabled because the booking results may be JS-rendered.
+        def skip_nonessential_resources(route):
+            if route.request.resource_type in {"image", "font", "media"}:
+                route.abort()
+            else:
+                route.continue_()
+
+        page.route("**/*", skip_nonessential_resources)
 
         for target in urls:
             try:
@@ -228,28 +243,31 @@ def main():
                     timeout=45000,
                 )
 
-                # JavaScriptによる描画を少し待つ
-                page.wait_for_timeout(5000)
+                # Wait only until a relevant availability signal appears, up to 5 seconds.
+                # This retains a conservative upper bound while allowing fast pages to finish early.
+                try:
+                    page.wait_for_function(
+                        r"""() => {
+                            const t = (document.body?.innerText || '').replace(/\s+/g, ' ');
+                            const soldOut = t.includes('満室となっております') ||
+                                            t.includes('空室がありません') ||
+                                            t.includes('空室なし') ||
+                                            t.includes('ご希望の日程ではご予約いただけません');
+                            const zeroResultAndSoldOut = /検索結果\s*0\/1件/.test(t) && t.includes('満室');
+                            const oneResultAndRooms = /検索結果\s*1\/1件/.test(t) && /残り\s*\d+\s*室/.test(t);
+                            return soldOut || zeroResultAndSoldOut || oneResultAndRooms;
+                        }""",
+                        timeout=5000,
+                    )
+                except PlaywrightTimeoutError:
+                    # No signal within 5 seconds: still inspect the page and classify UNKNOWN if needed.
+                    pass
 
-                # ページの取得状況を診断
-                print("[DEBUG] Facility:", target["name"])
-                print("[DEBUG] Requested URL:", target["url"])
+                text = page.locator("body").inner_text(timeout=10000)
+                print("[DEBUG] Facility/date:", target["name"])
                 print("[DEBUG] Final URL:", page.url)
-                print("[DEBUG] HTTP status:",
-                      response.status if response else None)
-                print("[DEBUG] Content-Type:",
-                      response.headers.get("content-type")
-                      if response else None)
-                print("[DEBUG] Page title:", repr(page.title()))
-
-                html = page.content()
-                print("[DEBUG] HTML length:", len(html))
-                print("[DEBUG] HTML preview:", repr(html[:1000]))
-
-                text = page.locator("body").inner_text(timeout=15000)
+                print("[DEBUG] HTTP status:", response.status if response else None)
                 print("[DEBUG] Text length:", len(text))
-                print("[DEBUG] Page text:", repr(text[:1000]))
-                print("[DEBUG] Target date:", target["date"])
 
                 if not text.strip():
                     raise RuntimeError(
@@ -307,6 +325,8 @@ def main():
     ]
     
     if newly_available:
+        if not RECIPIENT:
+            raise RuntimeError("NOTIFY_TO secret/environment variable is not set")
         start_date = os.getenv("START_DATE", "2026-11-01")
         end_date = os.getenv("END_DATE", "2026-11-30")
 
