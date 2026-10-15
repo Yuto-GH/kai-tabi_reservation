@@ -164,9 +164,10 @@ def classify(text: str):
     if any(s in normalized for s in SOLD_OUT):
         return "UNAVAILABLE", "official sold-out wording detected"
 
-    # 検索結果に客室があり、残室数が明示されている
+    # 検索結果の分子・分母がいずれも正の整数で、残室数も正の整数
+    # （例: 検索結果1/2件 ... 残り2室）と明示されている場合のみ候補扱い
     if re.search(
-        r"検索結果\s*1/1件.{0,250}残り\s*\d+\s*室",
+        r"検索結果\s*[1-9]\d*/[1-9]\d*件.{0,250}残り\s*[1-9]\d*\s*室",
         normalized,
     ):
         return (
@@ -281,7 +282,7 @@ def main():
                 print("[DEBUG] Classification:", status)
                 print("[DEBUG] Reason:", reason)
 
-                for keyword in ["検索結果0/1件", "満室", "空室あり", "残りわずか"]:
+                for keyword in ["検索結果", "満室", "空室あり", "残りわずか"]:
                     pos = normalized.find(keyword)
                     if pos >= 0:
                         print(
