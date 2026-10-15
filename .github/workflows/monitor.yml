@@ -1,9 +1,8 @@
-
 name: KAITABI20s availability monitor
 
 on:
   schedule:
-    - cron: '7,37 * * * *'
+    - cron: '7,37 * * * *' # every 30 minutes
   workflow_dispatch:
 
 permissions:
@@ -16,7 +15,7 @@ concurrency:
 jobs:
   monitor:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 20
 
     steps:
       - uses: actions/checkout@v4
@@ -26,20 +25,33 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
+          cache: pip
+          cache-dependency-path: requirements.txt
+
+      - name: Cache Playwright browser
+        id: playwright-cache
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: ${{ runner.os }}-playwright-chromium-${{ hashFiles('requirements.txt') }}
 
       - name: Install dependencies
         run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
-          python -m playwright install --with-deps chromium
+          python -m pip install -r requirements.txt
+          if [ "${{ steps.playwright-cache.outputs.cache-hit }}" != "true" ]; then
+            python -m playwright install --with-deps chromium
+          else
+            python -m playwright install-deps chromium
+          fi
 
       - name: Test availability classification
         run: python -m unittest -v test_classify.py
 
       - name: Check booking pages
         env:
-          STAY_DATE: '2026-11-10'
-          NOTIFY_TO: 'newyork.yuto.19980403@gmail.com'
+          START_DATE: '2026-11-01'
+          END_DATE: '2026-11-30'
+          NOTIFY_TO: ${{ secrets.NOTIFY_TO }}
           BOOKING_URLS_JSON: ${{ secrets.BOOKING_URLS_JSON }}
           SMTP_HOST: ${{ secrets.SMTP_HOST }}
           SMTP_PORT: ${{ secrets.SMTP_PORT }}
@@ -51,7 +63,6 @@ jobs:
       - name: Save deduplication state
         run: |
           git add state.json
-
           if ! git diff --cached --quiet -- state.json; then
             git config user.name 'github-actions[bot]'
             git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
