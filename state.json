@@ -237,9 +237,10 @@
       "http_status": 200
     },
     "界 箱根（11/10宿泊）": {
-      "status": "ERROR",
-      "reason": "Page.goto: Timeout 45000ms exceeded.\nCall log:\n  - navigating to \"https://hoshinoresorts.com/JA/hotels/0000000117/plans/0000000338?checkIn=2026%2F11%2F10&stay=1&a=2&b=0&c=0&d=0\", waiting until \"domcontentloaded\"\n",
-      "url": "https://hoshinoresorts.com/JA/hotels/0000000117/plans/0000000338?checkIn=2026%2F11%2F10&stay=1&a=2&b=0&c=0&d=0"
+      "status": "UNKNOWN",
+      "reason": "no confirmed room-level availability signal",
+      "url": "https://hoshinoresorts.com/JA/hotels/0000000117/plans/0000000338?checkIn=2026%2F11%2F10&stay=1&a=2&b=0&c=0&d=0",
+      "http_status": 200
     },
     "界 箱根（11/11宿泊）": {
       "status": "UNKNOWN",
