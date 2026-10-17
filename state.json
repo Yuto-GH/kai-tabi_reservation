@@ -189,9 +189,10 @@
       "http_status": 200
     },
     "界 箱根（11/2宿泊）": {
-      "status": "ERROR",
-      "reason": "Page.goto: Timeout 45000ms exceeded.\nCall log:\n  - navigating to \"https://hoshinoresorts.com/JA/hotels/0000000117/plans/0000000338?checkIn=2026%2F11%2F02&stay=1&a=2&b=0&c=0&d=0\", waiting until \"domcontentloaded\"\n",
-      "url": "https://hoshinoresorts.com/JA/hotels/0000000117/plans/0000000338?checkIn=2026%2F11%2F02&stay=1&a=2&b=0&c=0&d=0"
+      "status": "UNAVAILABLE",
+      "reason": "official sold-out wording detected",
+      "url": "https://hoshinoresorts.com/JA/hotels/0000000117/plans/0000000338?checkIn=2026%2F11%2F02&stay=1&a=2&b=0&c=0&d=0",
+      "http_status": 200
     },
     "界 箱根（11/3宿泊）": {
       "status": "UNAVAILABLE",
@@ -212,9 +213,10 @@
       "http_status": 200
     },
     "界 箱根（11/6宿泊）": {
-      "status": "ERROR",
-      "reason": "Page.goto: Timeout 45000ms exceeded.\nCall log:\n  - navigating to \"https://hoshinoresorts.com/JA/hotels/0000000117/plans/0000000338?checkIn=2026%2F11%2F06&stay=1&a=2&b=0&c=0&d=0\", waiting until \"domcontentloaded\"\n",
-      "url": "https://hoshinoresorts.com/JA/hotels/0000000117/plans/0000000338?checkIn=2026%2F11%2F06&stay=1&a=2&b=0&c=0&d=0"
+      "status": "UNAVAILABLE",
+      "reason": "official sold-out wording detected",
+      "url": "https://hoshinoresorts.com/JA/hotels/0000000117/plans/0000000338?checkIn=2026%2F11%2F06&stay=1&a=2&b=0&c=0&d=0",
+      "http_status": 200
     },
     "界 箱根（11/7宿泊）": {
       "status": "UNAVAILABLE",
@@ -373,10 +375,9 @@
       "http_status": 200
     },
     "界 草津（11/3宿泊）": {
-      "status": "UNAVAILABLE",
-      "reason": "selected room result indicates sold out",
-      "url": "https://hoshinoresorts.com/JA/hotels/0000000135/plans/0000000030?checkIn=2026%2F11%2F03&stay=1&a=2&b=0&c=0&d=0",
-      "http_status": 200
+      "status": "ERROR",
+      "reason": "Page.goto: Timeout 45000ms exceeded.\nCall log:\n  - navigating to \"https://hoshinoresorts.com/JA/hotels/0000000135/plans/0000000030?checkIn=2026%2F11%2F03&stay=1&a=2&b=0&c=0&d=0\", waiting until \"domcontentloaded\"\n",
+      "url": "https://hoshinoresorts.com/JA/hotels/0000000135/plans/0000000030?checkIn=2026%2F11%2F03&stay=1&a=2&b=0&c=0&d=0"
     },
     "界 草津（11/4宿泊）": {
       "status": "UNAVAILABLE",
@@ -451,10 +452,9 @@
       "http_status": 200
     },
     "界 草津（11/16宿泊）": {
-      "status": "UNAVAILABLE",
-      "reason": "selected room result indicates sold out",
-      "url": "https://hoshinoresorts.com/JA/hotels/0000000135/plans/0000000030?checkIn=2026%2F11%2F16&stay=1&a=2&b=0&c=0&d=0",
-      "http_status": 200
+      "status": "ERROR",
+      "reason": "Page.goto: Timeout 45000ms exceeded.\nCall log:\n  - navigating to \"https://hoshinoresorts.com/JA/hotels/0000000135/plans/0000000030?checkIn=2026%2F11%2F16&stay=1&a=2&b=0&c=0&d=0\", waiting until \"domcontentloaded\"\n",
+      "url": "https://hoshinoresorts.com/JA/hotels/0000000135/plans/0000000030?checkIn=2026%2F11%2F16&stay=1&a=2&b=0&c=0&d=0"
     },
     "界 草津（11/17宿泊）": {
       "status": "UNAVAILABLE",
