@@ -111,10 +111,9 @@
       "http_status": 200
     },
     "界 仙石原（11/19宿泊）": {
-      "status": "UNAVAILABLE",
-      "reason": "official sold-out wording detected",
-      "url": "https://hoshinoresorts.com/JA/hotels/0000000124/plans/0000000116?checkIn=2026%2F11%2F19&stay=1&a=2&b=0&c=0&d=0",
-      "http_status": 200
+      "status": "ERROR",
+      "reason": "Page.goto: Timeout 45000ms exceeded.\nCall log:\n  - navigating to \"https://hoshinoresorts.com/JA/hotels/0000000124/plans/0000000116?checkIn=2026%2F11%2F19&stay=1&a=2&b=0&c=0&d=0\", waiting until \"domcontentloaded\"\n",
+      "url": "https://hoshinoresorts.com/JA/hotels/0000000124/plans/0000000116?checkIn=2026%2F11%2F19&stay=1&a=2&b=0&c=0&d=0"
     },
     "界 仙石原（11/20宿泊）": {
       "status": "UNAVAILABLE",
@@ -225,10 +224,9 @@
       "http_status": 200
     },
     "界 箱根（11/8宿泊）": {
-      "status": "UNAVAILABLE",
-      "reason": "official sold-out wording detected",
-      "url": "https://hoshinoresorts.com/JA/hotels/0000000117/plans/0000000338?checkIn=2026%2F11%2F08&stay=1&a=2&b=0&c=0&d=0",
-      "http_status": 200
+      "status": "ERROR",
+      "reason": "Page.goto: Timeout 45000ms exceeded.\nCall log:\n  - navigating to \"https://hoshinoresorts.com/JA/hotels/0000000117/plans/0000000338?checkIn=2026%2F11%2F08&stay=1&a=2&b=0&c=0&d=0\", waiting until \"domcontentloaded\"\n",
+      "url": "https://hoshinoresorts.com/JA/hotels/0000000117/plans/0000000338?checkIn=2026%2F11%2F08&stay=1&a=2&b=0&c=0&d=0"
     },
     "界 箱根（11/9宿泊）": {
       "status": "UNKNOWN",
@@ -279,10 +277,9 @@
       "http_status": 200
     },
     "界 箱根（11/17宿泊）": {
-      "status": "UNKNOWN",
-      "reason": "no confirmed room-level availability signal",
-      "url": "https://hoshinoresorts.com/JA/hotels/0000000117/plans/0000000338?checkIn=2026%2F11%2F17&stay=1&a=2&b=0&c=0&d=0",
-      "http_status": 200
+      "status": "ERROR",
+      "reason": "Page.goto: Timeout 45000ms exceeded.\nCall log:\n  - navigating to \"https://hoshinoresorts.com/JA/hotels/0000000117/plans/0000000338?checkIn=2026%2F11%2F17&stay=1&a=2&b=0&c=0&d=0\", waiting until \"domcontentloaded\"\n",
+      "url": "https://hoshinoresorts.com/JA/hotels/0000000117/plans/0000000338?checkIn=2026%2F11%2F17&stay=1&a=2&b=0&c=0&d=0"
     },
     "界 箱根（11/18宿泊）": {
       "status": "UNKNOWN",
